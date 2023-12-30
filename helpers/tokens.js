@@ -11,7 +11,7 @@ function createToken(user) {
     username: user.username,
     isAdmin: user.isAdmin || false,
   };
-
+  console.log(`PAYLOAD CREATED FOR ${user.username}:`, payload)
   return jwt.sign(payload, SECRET_KEY);
 }
 

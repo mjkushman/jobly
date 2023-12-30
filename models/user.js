@@ -1,5 +1,6 @@
 "use strict";
 
+
 const db = require("../db");
 const bcrypt = require("bcrypt");
 const { sqlForPartialUpdate } = require("../helpers/sql");
@@ -22,7 +23,7 @@ class User {
    **/
 
   static async authenticate(username, password) {
-    // try to find the user first
+    // try to find the user first. Makes sure this is an existing username
     const result = await db.query(
           `SELECT username,
                   password,
@@ -204,6 +205,16 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
   }
+
+
+  static async apply(username, id) {
+    let result = await db.query(
+      `INSERT INTO applications (username, job_id) VALUES ($1, $2) RETURNING username, job_id`, [username, id]);
+
+    const application = result.rows[0]
+    return application;
+  }
+
 }
 
 
